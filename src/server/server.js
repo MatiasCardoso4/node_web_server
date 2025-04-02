@@ -1,10 +1,15 @@
-const express = require("express");
-const path = require("path");
+import express from 'express'
+import {dirname,join} from 'path'
+import { fileURLToPath } from 'url';
 
 const startServer = (options) => {
   const { port, public_path = "public" } = options;
   const app = express();
-  const publicAbsolutePath = path.join(__dirname + `../../../${public_path}/index.html`);
+
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
+  const publicAbsolutePath = join(__dirname + `../../../${public_path}/index.html` );
+  // const publicAbsolutePath = path.join(__dirname + `../../../${public_path}/index.html`);
   app.use(express.static(public_path));
 
   app.get('/{*splat}',async (req, res) => {
@@ -17,4 +22,4 @@ const startServer = (options) => {
   });
 };
 
-module.exports = { startServer };
+export default startServer;
